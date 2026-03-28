@@ -13,15 +13,15 @@ const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const GUILD_ID = process.env.GUILD_ID;
 
-// 대상 역할
+// ✅ 변경된 대상 역할
 const SOURCE_ROLE_IDS = [
-  '1386716926528585855',
-  '1386716926528585857',
-  '1484955943237193909'
+  '1486229581190004753',
+  '1486229581190004754',
+  '1486229581584142437'
 ];
 
-// 지급할 역할
-const TARGET_ROLE_ID = '1487030918794313758';
+// ✅ 변경된 지급 역할
+const TARGET_ROLE_ID = '1486229581584142436';
 
 const client = new Client({
   intents: [
@@ -36,11 +36,11 @@ const commands = [
   new SlashCommandBuilder()
     .setName('전체지급')
     .setDescription('조건 충족 유저 전체에게 역할 지급')
-    .setDefaultMemberPermissions(0) // 기본은 아무도 못씀
+    .setDefaultMemberPermissions(0)
     .toJSON()
 ];
 
-// 명령어 등록 함수
+// 명령어 등록
 async function registerCommands() {
   const rest = new REST({ version: '10' }).setToken(TOKEN);
 
@@ -71,7 +71,7 @@ async function addTargetRole(member) {
   return false;
 }
 
-// 전체 지급 함수
+// 전체 지급
 async function fullGrant(guild, interaction) {
   await guild.members.fetch();
 
@@ -105,7 +105,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === '전체지급') {
-    // 관리자 체크
     if (!interaction.member.permissions.has('Administrator')) {
       return interaction.reply({
         content: '❌ 관리자만 사용 가능',
@@ -122,7 +121,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-// 자동 지급 (기존 기능 유지)
+// 자동 지급
 client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
   const had = hasAnySourceRole(oldMember);
   const has = hasAnySourceRole(newMember);
